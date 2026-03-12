@@ -1,0 +1,10 @@
+## Day 13 – Cloud Development Environments
+
+Learned how cloud-based development environments work.
+
+Examples include:
+- GitHub Codespaces
+- GitPod
+- Replit
+
+These platforms allow developers to run development environments directly in the browser without installing tools locally.
