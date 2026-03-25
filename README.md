@@ -1,2 +1,2 @@
 # 30-days-of-streamlit
-Starting 30 days of streamlit challenge.
+30 days of streamlit challenge.
