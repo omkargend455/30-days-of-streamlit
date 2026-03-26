@@ -54,8 +54,10 @@ st.json(st.session_state)
 
 
 # ------------------------------
-# Reset button
+# Reset button (fixed)
 # ------------------------------
-if st.button("Reset"):
+def reset_values():
     st.session_state.lbs = 0.0
     st.session_state.kg = 0.0
+
+st.button("Reset", on_click=reset_values)
