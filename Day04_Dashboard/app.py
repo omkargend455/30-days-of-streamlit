@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -34,19 +36,41 @@ def audience_simple(code):
 # ======================================================
 st.sidebar.header("📂 Upload YouTube CSV Files")
 
-file_agg = st.sidebar.file_uploader(
+# Base directory for demo files
+BASE_DIR = Path(__file__).resolve().parent
+DEFAULT_AGG = BASE_DIR / "Aggregated_Metrics_By_Video.csv"
+DEFAULT_COUNTRY = BASE_DIR / "Aggregated_Metrics_By_Country_And_Subscriber_Status.csv"
+DEFAULT_TIME = BASE_DIR / "Video_Performance_Over_Time.csv"
+
+has_demo_files = DEFAULT_AGG.exists() and DEFAULT_COUNTRY.exists() and DEFAULT_TIME.exists()
+
+uploaded_agg = st.sidebar.file_uploader(
     "Aggregated Metrics By Video", type="csv"
 )
 
-file_country = st.sidebar.file_uploader(
+uploaded_country = st.sidebar.file_uploader(
     "Metrics By Country & Subscriber Status", type="csv"
 )
 
-file_time = st.sidebar.file_uploader(
+uploaded_time = st.sidebar.file_uploader(
     "Video Performance Over Time", type="csv"
 )
 
-if not all([file_agg, file_country, file_time]):
+any_uploaded = any([uploaded_agg, uploaded_country, uploaded_time])
+all_uploaded = all([uploaded_agg, uploaded_country, uploaded_time])
+
+if any_uploaded and not all_uploaded:
+    st.sidebar.warning("⚠️ Uploading custom data: please upload all 3 CSV files to replace demo data.")
+    st.info("⬅️ Please complete uploading all 3 required CSV files to analyze your channel.")
+    st.stop()
+
+if all_uploaded:
+    file_agg, file_country, file_time = uploaded_agg, uploaded_country, uploaded_time
+    st.sidebar.success("✅ Showing your custom channel data.")
+elif has_demo_files:
+    file_agg, file_country, file_time = str(DEFAULT_AGG), str(DEFAULT_COUNTRY), str(DEFAULT_TIME)
+    st.sidebar.info("ℹ️ Showing **Demo Dataset**. Upload your own CSVs above anytime to analyze your channel.")
+else:
     st.info("⬅️ Upload all required CSV files to continue")
     st.stop()
 
