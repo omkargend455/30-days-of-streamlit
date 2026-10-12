@@ -197,12 +197,24 @@ if mode == "Aggregate Metrics":
 
     numeric_cols = df_display.select_dtypes(include=[np.number]).columns
 
+    styler = df_display.style
+    if hasattr(styler, "map"):
+        styled_df = (
+            styler
+            .map(style_negative, subset=numeric_cols)
+            .map(style_positive, subset=numeric_cols)
+            .format("{:.1%}", subset=numeric_cols)
+        )
+    else:
+        styled_df = (
+            styler
+            .applymap(style_negative, subset=numeric_cols)
+            .applymap(style_positive, subset=numeric_cols)
+            .format("{:.1%}", subset=numeric_cols)
+        )
+
     st.dataframe(
-        df_display
-        .style
-        .applymap(style_negative, subset=numeric_cols)
-        .applymap(style_positive, subset=numeric_cols)
-        .format("{:.1%}", subset=numeric_cols),
+        styled_df,
         use_container_width=True
     )
 
